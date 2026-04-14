@@ -27,6 +27,6 @@ export const askAI = async (context, question) => {
 
   } catch (error) {
     console.log("AI ERROR:", error);
-    return "AI error";
+    return error.message;;
   }
 };
