@@ -4,11 +4,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export const askAI = async (context, question) => {
   try {
-
-    // 🔥 ADD THIS LINE HERE
-    console.log("KEY CHECK:", process.env.GEMINI_API_KEY);
-
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
     const prompt = `
     You are an AI tutor.
@@ -27,6 +23,6 @@ export const askAI = async (context, question) => {
 
   } catch (error) {
     console.log("AI ERROR:", error);
-    return error.message;;
+    return error.message;
   }
 };
