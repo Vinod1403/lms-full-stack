@@ -1,25 +1,40 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+import fetch from "node-fetch";
 
 export const askAI = async (context, question) => {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    const prompt = `
-    You are an AI tutor.
-    Explain clearly.
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: `
+You are an AI tutor. Explain clearly.
 
-    Context:
-    ${context}
+Context:
+${context}
 
-    Question:
-    ${question}
-    `;
+Question:
+${question}
+                  `,
+                },
+              ],
+            },
+          ],
+        }),
+      }
+    );
 
-    const result = await model.generateContent(prompt);
+    const data = await response.json();
 
-    return result.response.text();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
 
   } catch (error) {
     console.log("AI ERROR:", error);
