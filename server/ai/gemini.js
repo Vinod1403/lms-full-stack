@@ -34,7 +34,9 @@ ${question}
 
     const data = await response.json();
 
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
+    console.log("FULL AI RESPONSE:", JSON.stringify(data, null, 2));
+
+    return data?.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
 
   } catch (error) {
     console.log("AI ERROR:", error);
