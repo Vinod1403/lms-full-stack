@@ -1,12 +1,15 @@
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export const askAI = async (context, question) => {
   try {
-    const completion = await openai.chat.completions.create({
+
+    console.log("OPENAI KEY:", process.env.OPENAI_API_KEY);
+
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+
+    const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
         {
@@ -15,22 +18,15 @@ export const askAI = async (context, question) => {
         },
         {
           role: "user",
-          content: `
-Context:
-${context}
-
-Question:
-${question}
-          `
+          content: `Context:\n${context}\n\nQuestion:\n${question}`
         }
       ],
-      temperature: 0.7,
     });
 
-    return completion.choices[0].message.content;
+    return response.choices[0].message.content;
 
   } catch (error) {
-    console.log("AI ERROR:", error);
+    console.log("OPENAI ERROR:", error);
     return error.message;
   }
 };
