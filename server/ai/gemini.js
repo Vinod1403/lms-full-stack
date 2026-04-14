@@ -13,6 +13,7 @@ export const askAI = async (context, question) => {
         body: JSON.stringify({
           contents: [
             {
+              role: "user",
               parts: [
                 {
                   text: `
@@ -23,11 +24,15 @@ ${context}
 
 Question:
 ${question}
-                  `,
-                },
-              ],
-            },
+                  `
+                }
+              ]
+            }
           ],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 500
+          }
         }),
       }
     );
